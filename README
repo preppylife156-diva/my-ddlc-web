@@ -1,6 +1,7 @@
 DDLC Control Centre
 ====================
 
+<<<<<<< HEAD
 Verified game package
 ---------------------
 
@@ -78,10 +79,22 @@ Tests and troubleshooting
 -------------------------
 
 Run the available checks with:
+=======
+Run the Control Centre from this project with:
+
+    python3 bridge.py
+
+Open the bridge's forwarded port 8765 in Codespaces. The bridge serves
+`ddlc-control-centre-integrated.html` at `/` and binds to 127.0.0.1. Open the
+forwarded bridge URL so the app and local API share an origin.
+
+Run checks with:
+>>>>>>> origin/main
 
     python3 -m unittest discover -s tests -v
     node --test tests/test_control_centre.js
 
+<<<<<<< HEAD
 - Missing game files: place the private ZIP at `ddlc-win.zip`, then run the
   installer. An existing destination is never replaced automatically.
 - Bridge token errors: run the bridge and game as the same user; confirm
@@ -96,3 +109,32 @@ Run the available checks with:
   labels reported by that running game are enabled.
 - Browser archive rejected: ZIP64, encrypted entries, unsafe paths, symlinks,
   archives over 512 MiB, and extracted packages over 1 GiB are unsupported.
+=======
+Package behavior
+----------------
+
+- Upload Custom reads and indexes ZIP paths without changing the selected ZIP.
+- Browser projects with an identifiable HTML entry point can be explicitly
+  opened in a sandboxed frame. The bridge extracts them to a temporary
+  directory, rejects unsafe archive paths, and removes the hosted copy when
+  the package is removed from the session.
+- Desktop Ren'Py packages are identified but cannot execute in a browser.
+  Launch `DDLC.exe` or `DDLC.sh` with the Ren'Py desktop runtime instead.
+- This repository does not include DDLC game files. Run Recommended Version
+  reports the absent game files and installed patch; it never reports a false
+  launch.
+
+Ren'Py bridge
+-------------
+
+Copy `ddlc_control_centre.rpy` into the selected game's `game/` directory and
+run the game with the local bridge available at 127.0.0.1:8765. The patch polls
+the bridge, returns runtime labels for `scene list`, and checks `scene <label>`
+with `renpy.has_label` before jumping. Act shortcuts are attempted only if the
+configured label exists in the loaded game. This integration has not been
+executed against a DDLC runtime in this repository because no game files or
+Ren'Py runtime are present here.
+
+Uploads and extracted package files are session-only temporary data. Do not
+upload packages you are not authorized to use.
+>>>>>>> origin/main

@@ -72,6 +72,7 @@ const commands=[
 ['js','Show safe JavaScript utility status; arbitrary code execution is disabled'],['javascript','Alias for js'],['check-js','Check built-in page JavaScript support'],['format-js','Explain that arbitrary code formatting is not wired up'],['parse-json','Parse JSON literal: parse-json <json>'],['validate-json','Validate JSON literal: validate-json <json>'],['encode','Encode text as Base64: encode <text>'],['decode','Decode Base64: decode <base64>'],['base64','Alias for encode <text> or decode <base64>'],['url-encode','URL-encode text: url-encode <text>'],['url-decode','URL-decode text: url-decode <text>'],['inspect-object','Inspect JSON object keys: inspect-object <json>'],['list-keys','List keys in a JSON object: list-keys <json>'],['list-values','List values in a JSON object: list-values <json>'],
 ['validate-zip','Check whether a ZIP archive is loaded and indexed'],['export-debug-report','Download a text diagnostic report']
 ];
+<<<<<<< HEAD
 const BRIDGE_ORIGIN=location.origin;
 const BRIDGE_TOKEN='__DDLC_CC_TOKEN__';
 const ACT_TARGETS={'act 1':'ch0_main','act 2':'ch21_main','act 3':'ch30_main','act 4':'ch40_main'};
@@ -79,6 +80,16 @@ let bridgeOnline=false, gameOnline=false, lastResultId=0, lastRequestedScene='(n
 async function bridgeFetch(path, options={}){const sep=path.includes('?')?'&':'?';return fetch(BRIDGE_ORIGIN+path+sep+'token='+encodeURIComponent(BRIDGE_TOKEN),options)}
 async function refreshBridgeStatus(silent=false){try{const r=await bridgeFetch('/status');if(!r.ok)throw new Error('bridge response '+r.status);const s=await r.json();bridgeOnline=true;gameOnline=!!s.game_connected;$('runtimePill').textContent=gameOnline?'GAME CONNECTED':(bridgeOnline?'BRIDGE ONLINE · GAME WAITING':'RUNTIME NOT CONNECTED');$('gameStatus').textContent=gameOnline?`Connected · ${s.runtime_label_count||0} labels`:'Not connected';if(!gameOnline)updateRuntimeCommands([]);if(!silent)log(gameOnline?'Connected: bridge and Ren’Py patch are responding.':'Local bridge is online; the game patch has not checked in.','warn');await readBridgeResults();return s}catch(e){bridgeOnline=false;gameOnline=false;updateRuntimeCommands([]);$('runtimePill').textContent='RUNTIME NOT CONNECTED';$('gameStatus').textContent='Not connected';if(!silent)log('Cannot reach the local bridge. Open this page from bridge.py on the same desktop/runtime host.','warn');return null}}
 async function readBridgeResults(){try{const r=await bridgeFetch('/results?after='+lastResultId);if(!r.ok)return;const data=await r.json();(data.results||[]).forEach(x=>{lastResultId=Math.max(lastResultId,x.id||0);log('[GAME] '+x.message,x.ok?'ok':'warn');if(x.scene)lastRequestedScene=x.scene;if(Array.isArray(x.labels))updateRuntimeCommands(x.labels);});}catch(e){}}
+=======
+const BRIDGE='http://127.0.0.1:8765';
+const BRIDGE_ORIGIN=location.protocol==='file:'?'http://127.0.0.1:8765':location.origin;
+const BRIDGE_TOKEN='ddlc-control-centre-local-v1';
+let bridgeOnline=false, gameOnline=false, lastResultId=0, lastRequestedScene='(none)';
+async function bridgeFetch(path, options={}){const sep=path.includes('?')?'&':'?';return fetch(BRIDGE+path+sep+'token='+encodeURIComponent(BRIDGE_TOKEN),options)}
+async function bridgeFetch(path, options={}){const sep=path.includes('?')?'&':'?';return fetch(BRIDGE_ORIGIN+path+sep+'token='+encodeURIComponent(BRIDGE_TOKEN),options)}
+async function refreshBridgeStatus(silent=false){try{const r=await bridgeFetch('/status');if(!r.ok)throw new Error('bridge response '+r.status);const s=await r.json();bridgeOnline=true;gameOnline=!!s.game_connected;$('runtimePill').textContent=gameOnline?'GAME CONNECTED':(bridgeOnline?'BRIDGE ONLINE · GAME WAITING':'RUNTIME NOT CONNECTED');if(!silent)log(gameOnline?'Connected: local bridge and DDLC runtime are responding.':'Local bridge is online, but the game patch has not checked in yet. Launch DDLC with the patch installed.','warn');await readBridgeResults();return s}catch(e){bridgeOnline=false;gameOnline=false;$('runtimePill').textContent='RUNTIME NOT CONNECTED';if(!silent)log('Cannot reach local bridge at 127.0.0.1:8765. Start bridge.py from the integration folder first.','warn');return null}}
+async function readBridgeResults(){try{const r=await bridgeFetch('/results?after='+lastResultId);if(!r.ok)return;const data=await r.json();(data.results||[]).forEach(x=>{lastResultId=Math.max(lastResultId,x.id||0);log('[GAME] '+x.message,x.ok?'ok':'warn');if(x.scene)lastRequestedScene=x.scene;});}catch(e){}}
+>>>>>>> origin/main
 async function sendRuntimeCommand(command){const status=await refreshBridgeStatus(true);if(!status){log('Command not sent: start the local bridge first.','warn');return false}try{const r=await bridgeFetch('/command',{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({command})});const d=await r.json();if(!r.ok||!d.ok)throw new Error(d.error||('HTTP '+r.status));log(d.game_connected?'Sent to the running DDLC game: '+command:'Queued for DDLC; the game has not checked in yet: '+command,d.game_connected?'ok':'warn');if(command.startsWith('scene '))lastRequestedScene=command.slice(6);return true}catch(e){log('Could not send command to game bridge: '+e.message,'err');return false}}
 function log(msg,kind=''){const d=document.createElement('div');d.className='line '+kind;d.textContent=msg;out.appendChild(d);out.scrollTop=out.scrollHeight;}
 function promptLog(cmd){const d=document.createElement('div');d.className='line';const s=document.createElement('span');s.className='prefix';s.textContent='DDLC> ';d.append(s,document.createTextNode(cmd));out.appendChild(d);out.scrollTop=out.scrollHeight;}
@@ -125,6 +136,11 @@ if(low==='format-js'){log('No source-code formatter is connected in this page.',
 if(low.startsWith('ddlc search ')){const term=full.trim().split(/\s+/).slice(2).join(' ');const ms=matchPath(term);printList(ms.map(x=>x.name));return}
 const near=commands.map(c=>({name:c[0],score:fuzzy(low,c[0])})).sort((a,b)=>a.score-b.score).slice(0,3);log(`Unknown command: ${full}`,'err');if(near.length)log('Did you mean: '+near.map(x=>x.name).join(', ')+'? Type help to see commands.','warn');
 }
+<<<<<<< HEAD
+=======
+function renderFiles(){const list=$('filelist');list.innerHTML='';const entries=activeEntries();$('fileCount').textContent=entries.length;$('pkgStatus').textContent=loadedZipName?'Loaded':'Not loaded';$('zipPill').textContent=loadedZipName?'ZIP INDEXED':'NO ZIP';if(!entries.length){const d=document.createElement('div');d.className='empty';d.textContent=loadedZipName?'No visible entries. Use restore to bring hidden entries back.':'No archive loaded yet.';list.appendChild(d);return}entries.slice(0,120).forEach(e=>{const row=document.createElement('div');row.className='fileentry';const name=document.createElement('span');name.textContent=e.name+(e.virtual?'  [virtual]':'');const del=document.createElement('button');del.textContent='Hide';del.title='Hide from this page’s listing only';del.addEventListener('click',()=>{hiddenEntries.add(e.name);renderFiles();log('Entry hidden from this listing only; ZIP unchanged.','ok')});row.append(name,del);list.appendChild(row)});if(entries.length>120){const more=document.createElement('div');more.className='empty';more.textContent=`Showing 120 of ${entries.length} entries. Use ls in the terminal for the full list.`;list.appendChild(more)}}
+async function readZip(file){if(!file.name.toLowerCase().endsWith('.zip')){log('Please choose a .zip file.','err');return}try{const buf=await file.arrayBuffer(),dv=new DataView(buf);let eocd=-1;for(let i=buf.byteLength-22;i>=Math.max(0,buf.byteLength-65557);i--){if(dv.getUint32(i,true)===0x06054b50){eocd=i;break}}if(eocd<0)throw new Error('ZIP central directory not found.');const count=dv.getUint16(eocd+10,true),cdOffset=dv.getUint32(eocd+16,true);let off=cdOffset, entries=[];for(let i=0;i<count;i++){if(dv.getUint32(off,true)!==0x02014b50)throw new Error('Invalid ZIP directory entry.');const method=dv.getUint16(off+10,true),size=dv.getUint32(off+20,true),nl=dv.getUint16(off+28,true),el=dv.getUint16(off+30,true),cl=dv.getUint16(off+32,true);const bytes=new Uint8Array(buf,off+46,nl);const name=new TextDecoder().decode(bytes);entries.push({name,size,method});off+=46+nl+el+cl}zipEntries=entries;hiddenEntries.clear();loadedZipName=file.name;renderFiles();log(`Indexed ${entries.length} file paths from ${file.name}. The original ZIP remains unchanged.`,'ok');const expected=entries.some(x=>x.name.toLowerCase().endsWith('/game/scripts.rpa'));if(expected)log('Found a packed Ren’Py scripts archive (scripts.rpa). Scene labels still need RPA script extraction and a compatible runtime.','warn');else log('No game/scripts.rpa path detected; this may not be a standard DDLC desktop package.','warn')}catch(e){log('ZIP inspection failed: '+e.message,'err')}}
+>>>>>>> origin/main
 $('uploadTop').onclick=$('uploadMain').onclick=$('uploadSide').onclick=()=>$('zipInput').click();$('zipInput').addEventListener('change',e=>{if(e.target.files[0])readZip(e.target.files[0])});$('dropzone').addEventListener('dragover',e=>{e.preventDefault();$('dropzone').style.borderColor='var(--pink)'});$('dropzone').addEventListener('dragleave',()=>$('dropzone').style.borderColor='');$('dropzone').addEventListener('drop',e=>{e.preventDefault();$('dropzone').style.borderColor='';if(e.dataTransfer.files[0])readZip(e.dataTransfer.files[0])});
 $('runBtn').onclick=()=>{run(input.value);input.value='';updateSuggestions();input.focus()};input.addEventListener('input',()=>{activeSuggestion=0;updateSuggestions()});input.addEventListener('keydown',e=>{const rows=[...sugg.querySelectorAll('.suggestion')];if(e.key==='ArrowDown'&&sugg.style.display==='block'){e.preventDefault();activeSuggestion=(activeSuggestion+1)%rows.length;updateSuggestions()}else if(e.key==='ArrowUp'&&sugg.style.display==='block'){e.preventDefault();activeSuggestion=(activeSuggestion-1+rows.length)%rows.length;updateSuggestions()}else if(e.key==='Tab'&&rows.length){e.preventDefault();input.value=rows[activeSuggestion].querySelector('code').textContent+' ';sugg.style.display='none'}else if(e.key==='Enter'){e.preventDefault();if(sugg.style.display==='block'&&rows.length&&input.value.trim()===rows[activeSuggestion].querySelector('code').textContent){input.value=rows[activeSuggestion].querySelector('code').textContent+' ';updateSuggestions()}else run(input.value),input.value='';}else if(e.key==='ArrowUp'&&sugg.style.display!=='block'){e.preventDefault();if(history.length){histIndex=Math.max(0,histIndex-1);input.value=history[histIndex]}}else if(e.key==='ArrowDown'&&sugg.style.display!=='block'){e.preventDefault();histIndex=Math.min(history.length,histIndex+1);input.value=history[histIndex]||''}});document.addEventListener('click',e=>{if(!e.target.closest('.commandarea'))sugg.style.display='none'});
 $('connectBtn').onclick=()=>refreshBridgeStatus(false);$('helpBtn').onclick=()=>{input.value='help';run(input.value);input.value=''};$('checkBtn').onclick=()=>run('check-game');$('sceneBtn').onclick=()=>run('scene list');$('resetBtn').onclick=()=>run('reset');$('cancelModal').onclick=()=>$('modalback').style.display='none';$('confirmModal').onclick=()=>{if(modalAction)modalAction();modalAction=null};$('floating').addEventListener('click',()=>{document.querySelector('.terminal').scrollIntoView({behavior:'smooth',block:'center'});input.focus()});
@@ -207,12 +223,17 @@ async function launchBrowserPackage(path){
     const frame=$('gameFrame');frame.onload=()=>setLaunchStatus('Preview document loaded; game runtime is not monitored.');
     frame.onerror=()=>setLaunchStatus('Browser preview failed to load.');
     $('gamebox').classList.add('is-playing');
+<<<<<<< HEAD
+=======
+    frame.src=`${BRIDGE}/package/${encodeURIComponent(packageId)}/${encodedPath}`;
+>>>>>>> origin/main
     frame.src=`${BRIDGE_ORIGIN}/package/${encodeURIComponent(packageId)}/${encodedPath}`;
     setLaunchStatus('Loading browser entry point…');
     log(`Opened browser entry point ${path} in an isolated frame. The page does not monitor its game runtime.`,'ok');
   }catch(error){setLaunchStatus('Launch failed');log(`Browser package could not be hosted: ${error.message}. Start bridge.py and open this page from its forwarded port.`, 'err')}
 }
 
+<<<<<<< HEAD
   function canNavigate(command,labels){
     if(command==='scene list'||command==='scene current')return true;
     const available=labels instanceof Set?labels:new Set(labels||[]);
@@ -222,6 +243,9 @@ async function launchBrowserPackage(path){
   }
 
   function resolveRunRequest(requested,entries,detected){
+=======
+function resolveRunRequest(requested,entries,detected){
+>>>>>>> origin/main
   const exact=entries.filter(entry=>entry.name.toLowerCase()===requested.toLowerCase()||entry.name.split('/').pop().toLowerCase()===requested.toLowerCase());
   if(!exact.length)return {kind:'not-found',matches:entries.filter(entry=>entry.name.toLowerCase().includes(requested.toLowerCase())).map(entry=>entry.name)};
   const paths=[...new Set(exact.map(entry=>entry.name))];
@@ -240,12 +264,15 @@ run=function(raw){
     log(`Package: ${loadedZipName||'not loaded'}\nIndexed entries: ${activeEntries().length}\nRuntime: ${gameOnline?'connected':'not connected'}\nBrowser: ${navigator.userAgent}`);
     return;
   }
+<<<<<<< HEAD
     if(/^scene\s+/.test(normalized)&&!['scene list','scene current'].includes(normalized)){
       const label=text.trim().split(/\s+/).slice(1).join(' ');
       if(!canNavigate('scene '+label,runtimeLabels)){history.push(text);histIndex=history.length;promptLog(text);log('Scene command disabled: this label has not been reported by the connected game. Run scene list first.','err');return}
     }
     const act=normalized.match(/^act ([1-4])$/);
     if(act&&!canNavigate(normalized,runtimeLabels)){history.push(text);histIndex=history.length;promptLog(text);log('Act command disabled: the connected game has not confirmed its configured label. Run scene list first.','err');return}
+=======
+>>>>>>> origin/main
   if(!/^run(?:\s|$)/i.test(text))return registeredRunForWrapper(raw);
   history.push(text);histIndex=history.length;promptLog(text);sugg.style.display='none';
   const requested=text.slice(3).trim();
@@ -263,7 +290,12 @@ $('runTypeDialog').addEventListener('click',event=>{if(event.target===$('runType
 $('uploadCustom').addEventListener('click',()=>{$('runTypeDialog').style.display='none';$('zipInput').click()});
 $('runRecommended').addEventListener('click',()=>{
   $('runTypeDialog').style.display='none';
+<<<<<<< HEAD
   runRecommendedGame();
+=======
+  log('Recommended DDLC version is not installed in this project. Missing game files: DDLC.exe or DDLC.sh, game/scripts.rpa, and the integration patch installed inside the game/game folder. bridge.py alone cannot launch desktop Ren’Py. Supply your own compatible files; desktop gameplay still requires the Ren’Py desktop runtime.','warn');
+  setLaunchStatus('Recommended version unavailable');
+>>>>>>> origin/main
 });
 $('fileSearch').addEventListener('input',renderFiles);
 $('removePackageBtn').addEventListener('click',async()=>{
@@ -273,6 +305,7 @@ $('removePackageBtn').addEventListener('click',async()=>{
   log('Selected package removed from this session. Original ZIP was not modified.','ok');
 });
 showPackageSummary();
+<<<<<<< HEAD
 function updateRuntimeCommands(labels){
   runtimeLabels=new Set(labels);
   for(let index=commands.length-1;index>=0;index--){
@@ -310,6 +343,15 @@ async function runRecommendedGame(){
   }catch(error){setLaunchStatus('Launch unavailable');log(`Recommended launch failed: ${error.message}. Run bridge.py on the same graphical device as the DDLC installation.`,'err')}
 }
 updateRuntimeCommands([]);
+=======
+const unverifiedSceneSuggestions=new Set(['scene sayonara','scene confession','scene natsuki','scene yuri','scene monika']);
+for(let index=commands.length-1;index>=0;index--){
+  if(unverifiedSceneSuggestions.has(commands[index][0])||commands[index][0]==='run')commands.splice(index,1);
+}
+commands.push(['run','Open a supported browser entry point: run <filename>']);
+commands.push(['scene <label>','Jump only to a label verified by the running Ren’Py game']);
+for(const item of commands){if(/^act [1-4]$/.test(item[0]))item[1]='Jump only if the running game contains the configured Act label';}
+>>>>>>> origin/main
 document.querySelector('.lowergrid .mini p').textContent='Scene list reports labels exposed by the running game. Scene jumps are checked with Ren’Py before use. Act shortcuts are attempted only when the configured label exists in that runtime; labels are not verified until a compatible game is running.';
 })();
 </script>

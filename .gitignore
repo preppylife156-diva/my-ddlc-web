@@ -1,5 +1,8 @@
 __pycache__/
 *.py[cod]
+<<<<<<< HEAD
 /ddlc-win.zip
 /private-game/
 /control-centre-test/
+=======
+>>>>>>> origin/main
