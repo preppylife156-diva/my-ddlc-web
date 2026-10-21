@@ -1,16 +1,9 @@
 # Copy this file into the selected Ren'Py game's game/ directory.
-<<<<<<< HEAD
 # This patch is compatible with the bundled Ren'Py 6.99/Python 2.7 runtime.
 
 init -10 python:
     import json
     import os
-=======
-# Scene targets are checked against the labels exposed by the running game.
-
-init -10 python:
-    import json
->>>>>>> origin/main
 
     try:
         import urllib.request as ddlc_cc_url
@@ -22,7 +15,6 @@ init -10 python:
     except NameError:
         ddlc_cc_string_types = (str,)
 
-<<<<<<< HEAD
     ddlc_cc_token_path = os.environ.get(
         "DDLC_CC_TOKEN_FILE",
         os.path.expanduser("~/.ddlc-control-centre-token"),
@@ -34,9 +26,6 @@ init -10 python:
     except Exception:
         pass
 
-=======
-    ddlc_cc_token = "ddlc-control-centre-local-v1"
->>>>>>> origin/main
     ddlc_cc_connection_status = "Waiting for bridge"
     ddlc_cc_last_scene = "(none)"
     ddlc_cc_polling = False
@@ -48,11 +37,8 @@ init -10 python:
     }
 
     def ddlc_cc_request(path, payload=None):
-<<<<<<< HEAD
         if not ddlc_cc_token:
             raise IOError("Control Centre bridge token file is unavailable")
-=======
->>>>>>> origin/main
         url = "http://127.0.0.1:8765" + path + "?token=" + ddlc_cc_token
         body = json.dumps(payload).encode("utf-8") if payload is not None else None
         request = ddlc_cc_url.Request(url, data=body)
@@ -61,7 +47,6 @@ init -10 python:
         response = ddlc_cc_url.urlopen(request, timeout=0.5)
         return json.loads(response.read())
 
-<<<<<<< HEAD
     def ddlc_cc_report(message, ok=True, scene=None, labels=None):
         try:
             payload = {
@@ -72,15 +57,6 @@ init -10 python:
             if labels is not None:
                 payload["labels"] = labels
             ddlc_cc_request("/result", payload)
-=======
-    def ddlc_cc_report(message, ok=True, scene=None):
-        try:
-            ddlc_cc_request("/result", {
-                "message": str(message)[:900],
-                "ok": bool(ok),
-                "scene": scene,
-            })
->>>>>>> origin/main
         except Exception:
             pass
 
@@ -95,11 +71,8 @@ init -10 python:
         if ddlc_cc_polling:
             return
         ddlc_cc_polling = True
-<<<<<<< HEAD
         jump_target = None
         restart_game = False
-=======
->>>>>>> origin/main
         try:
             response = ddlc_cc_request("/poll")
             ddlc_cc_connection_status = "Connected"
@@ -116,11 +89,7 @@ init -10 python:
 
             if command == "scene list":
                 labels = ddlc_cc_scene_labels()
-<<<<<<< HEAD
                 ddlc_cc_report("Runtime reports %d scene labels." % len(labels), True, labels=labels)
-=======
-                ddlc_cc_report("Runtime labels:\n" + "\n".join(labels[:60]), True)
->>>>>>> origin/main
             elif command == "scene current":
                 ddlc_cc_report("Last requested label: " + ddlc_cc_last_scene, True, ddlc_cc_last_scene)
             elif name == "scene":
@@ -129,11 +98,7 @@ init -10 python:
                 else:
                     ddlc_cc_last_scene = argument
                     ddlc_cc_report("Jumping to runtime-verified label: " + argument, True, argument)
-<<<<<<< HEAD
                     jump_target = argument
-=======
-                    renpy.jump(argument)
->>>>>>> origin/main
             elif name == "act" and argument in ddlc_cc_act_targets:
                 target = ddlc_cc_act_targets[argument]
                 if not renpy.has_label(target):
@@ -141,17 +106,10 @@ init -10 python:
                 else:
                     ddlc_cc_last_scene = target
                     ddlc_cc_report("Jumping to runtime-verified Act " + argument + " label: " + target, True, target)
-<<<<<<< HEAD
                     jump_target = target
             elif command in ("reset", "restart-game"):
                 ddlc_cc_report("Restarting the game through Ren'Py.", True)
                 restart_game = True
-=======
-                    renpy.jump(target)
-            elif command in ("reset", "restart-game"):
-                ddlc_cc_report("Restarting the game through Ren'Py.", True)
-                renpy.full_restart()
->>>>>>> origin/main
             else:
                 ddlc_cc_report("Unsupported game command.", False)
         except Exception as error:
@@ -159,14 +117,11 @@ init -10 python:
         finally:
             ddlc_cc_polling = False
 
-<<<<<<< HEAD
         if jump_target is not None:
             renpy.jump(jump_target)
         elif restart_game:
             renpy.full_restart()
 
-=======
->>>>>>> origin/main
 screen ddlc_cc_bridge_overlay():
     zorder 100
     draggroup:
