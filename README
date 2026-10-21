@@ -1,1 +1,98 @@
-hi
+DDLC Control Centre
+====================
+
+Verified game package
+---------------------
+
+The supplied `ddlc-win.zip` is an intact DDLC 1.1.1 desktop package. Its
+`game/scripts.rpa` uses RPA-3.0 and contains compiled Ren'Py scripts. The bundled
+runtime metadata reports Ren'Py 6.99.12.3. The package includes `DDLC.exe`,
+`DDLC.sh`, Windows 32-bit runtime files, and Linux x86_64/i686 runtime files.
+It is not a browser port and cannot be launched as an ordinary web page.
+
+The verified Act entry labels are `ch0_main`, `ch21_main`, `ch30_main`, and
+`ch40_main`. The patch also checks every requested scene against
+`renpy.get_all_labels()`/`renpy.has_label()` at runtime. The bridge rejects
+navigation targets that the connected game has not advertised. Direct jumps
+can still change game state or story flow; use them only when appropriate.
+
+Private installation
+--------------------
+
+Keep the original ZIP in the repository root as `ddlc-win.zip` or set
+`DDLC_ARCHIVE` to its path. It is ignored by Git. Install once with:
+
+    python3 bridge.py --install-recommended
+
+The installer validates ZIP paths and required files, extracts to
+`private-game/DDLC-1.1.1-pc/`, and copies `ddlc_control_centre.rpy` into that
+private game's `game/` directory. It refuses to overwrite an existing install.
+The extracted game and local ZIP are ignored by Git and must not be committed or
+published. `DDLC_GAME_DIR` can select a different install directory.
+
+Run the local bridge on the same computer and user account as the game:
+
+    python3 bridge.py
+
+Open the bridge's forwarded port 8765 in Codespaces. Keep its visibility
+private. The bridge serves the app and API on one origin. It creates a
+0600-permission random token at `~/.ddlc-control-centre-token`; the browser page
+receives the token from the local server, and the Ren'Py patch reads the same
+file. The bridge binds only to 127.0.0.1 and checks browser origins.
+
+Recommended launch and device limits
+------------------------------------
+
+Run Recommended Version inspects the configured local installation and only
+starts its native launcher when required files, the installed patch, a
+supported host runtime, and a graphical session are available. A process start
+is reported as a launch request; the UI reports the game as connected only
+after the Ren'Py patch polls the bridge.
+
+The current Codespace has the game files and patch installed, but no graphical
+display. It can inspect files and run the web preview; it cannot show the
+native DDLC window. A browser on an iPad or Chromebook cannot execute a Windows
+`.exe`, display a desktop process running on another computer, or reach a
+bridge bound to that other device's localhost. For native gameplay, run the
+bridge and private game installation on the same graphical desktop. The
+supplied archive has no native macOS runtime.
+
+Upload Custom inspects ZIP contents without changing the selected archive.
+Only a browser package with a detected HTML entry point can be previewed in the
+sandboxed iframe. `run <filename>` only opens that supported HTML entry point;
+`.exe`, `.sh`, `.rpa`, scripts, and other files are not treated as executable.
+Custom desktop games require separate manual installation and a compatible
+local runtime. The required custom-upload warning is shown in the launcher.
+
+Ren'Py patch
+------------
+
+For another local installation, copy `ddlc_control_centre.rpy` into its
+`game/` directory and start `bridge.py` under the same OS user. The patch polls
+`/poll`, reports runtime labels through `/result`, checks labels with
+`renpy.has_label`, and performs jumps outside its network exception handler so
+Ren'Py control-flow exceptions are not swallowed. The draggable in-game CC
+button is an overlay and does not request a window resize or exit fullscreen.
+
+Tests and troubleshooting
+-------------------------
+
+Run the available checks with:
+
+    python3 -m unittest discover -s tests -v
+    node --test tests/test_control_centre.js
+
+- Missing game files: place the private ZIP at `ddlc-win.zip`, then run the
+  installer. An existing destination is never replaced automatically.
+- Bridge token errors: run the bridge and game as the same user; confirm
+  `~/.ddlc-control-centre-token` is readable by that user.
+- Game remains disconnected: verify the patch exists at
+  `private-game/DDLC-1.1.1-pc/game/ddlc_control_centre.rpy` and that the game
+  can reach `127.0.0.1:8765` on the same host.
+- Desktop launch unavailable: use a graphical desktop with the matching
+  bundled runtime. A headless Codespace or remote tablet browser cannot display
+  the host desktop game.
+- Scene or Act rejected: run `scene list` while the patch is connected; only
+  labels reported by that running game are enabled.
+- Browser archive rejected: ZIP64, encrypted entries, unsafe paths, symlinks,
+  archives over 512 MiB, and extracted packages over 1 GiB are unsupported.

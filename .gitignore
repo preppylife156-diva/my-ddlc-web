@@ -1,0 +1,5 @@
+__pycache__/
+*.py[cod]
+/ddlc-win.zip
+/private-game/
+/control-centre-test/

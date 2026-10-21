@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DDLC Control Centre</title>
+<style>
+:root{--bg:#100b16;--panel:#1b1224;--panel2:#24152d;--pink:#ff8fcf;--pink2:#ffb6e1;--line:#59304f;--text:#fff1fa;--muted:#c8a9c4;--green:#a9f5cf;--red:#ff9aaf}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(ellipse at top,#35182f 0,#160e1c 45%,#0d0912 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}button{cursor:pointer}.app{max-width:1440px;margin:auto;padding:22px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:17px 20px;background:#1a1122dd;border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 40px #0004}
+.brand{display:flex;align-items:center;gap:13px}.logo{width:46px;height:46px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(145deg,#ffb9e4,#f45fb5);color:#411331;font-size:24px;box-shadow:0 0 24px #ff8fcf33}.brand h1{font-size:20px;margin:0;letter-spacing:.2px}.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}.actions{display:flex;gap:9px;flex-wrap:wrap}.btn{border:1px solid #7b426b;background:#2c1931;color:var(--text);padding:10px 13px;border-radius:12px}.btn:hover{border-color:var(--pink);background:#3b2040}.btn.primary{background:linear-gradient(135deg,#ff9dd8,#f76cba);color:#39122d;border:0;font-weight:750}.grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.8fr);gap:16px;margin-top:16px}.panel{background:#1a1124eF;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 12px 40px #0003}.panelhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 17px;border-bottom:1px solid #4b2b49;background:#21142a}.panelhead h2{font-size:14px;margin:0;letter-spacing:.3px}.pill{font-size:11px;color:#ffd9ef;background:#4a2443;border:1px solid #7d416c;padding:5px 8px;border-radius:99px}.gamebox{min-height:390px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;background:radial-gradient(ellipse at 50% 25%,#46203d66,transparent 60%),linear-gradient(145deg,#120d19,#1b1022)}.heartmark{font-size:58px;filter:drop-shadow(0 0 20px #ff75c888);margin-bottom:8px}.gamebox h2{font-size:25px;margin:5px 0 9px}.gamebox p{max-width:510px;line-height:1.6;color:var(--muted);font-size:13px}.gameactions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}.statusrow{display:flex;gap:8px;flex-wrap:wrap;padding:13px 16px;border-top:1px solid #4b2b49}.statusitem{font-size:11px;color:var(--muted);background:#21152a;border:1px solid #422641;border-radius:9px;padding:8px 10px}.statusitem b{color:var(--text);font-weight:600}.sidebody{padding:16px}.dropzone{border:1px dashed #a85a91;background:#26172d;border-radius:15px;padding:18px;text-align:center}.dropzone strong{display:block;margin-bottom:6px}.dropzone p{font-size:12px;color:var(--muted);line-height:1.5;margin:0 0 12px}.fileinput{display:none}.filelist{margin-top:12px;max-height:250px;overflow:auto;border:1px solid #452843;border-radius:12px}.filelist .empty{padding:15px;color:var(--muted);font-size:12px}.fileentry{display:flex;justify-content:space-between;gap:8px;padding:9px 11px;border-bottom:1px solid #35213a;font-size:11px;overflow-wrap:anywhere}.fileentry:last-child{border-bottom:0}.fileentry button{flex-shrink:0;background:transparent;color:#ffb3d9;border:0}.terminal{margin-top:16px}.terminalbody{padding:15px}.termout{height:220px;overflow:auto;background:#0b0910;border:1px solid #392239;border-radius:12px;padding:12px;font:12px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}.line{margin:0 0 4px}.line .prefix{color:#ff9fd6}.line.ok{color:#c4f7da}.line.warn{color:#ffd5a0}.line.err{color:#ff9eae}.commandarea{position:relative;margin-top:10px}.suggestions{display:none;position:absolute;bottom:calc(100% + 7px);left:0;right:0;z-index:5;max-height:205px;overflow:auto;background:#21142a;border:1px solid #88517b;border-radius:12px;box-shadow:0 14px 28px #0007}.suggestion{padding:9px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;border-bottom:1px solid #3b263e}.suggestion:last-child{border-bottom:0}.suggestion.active,.suggestion:hover{background:#492341}.suggestion code{color:#ffb1dc;font-size:12px}.suggestion span{color:var(--muted);font-size:11px;text-align:right}.inputrow{display:flex;gap:8px}.prompt{display:flex;align-items:center;padding:0 11px;background:#25152d;border:1px solid #583451;border-radius:12px;color:var(--pink);font:13px ui-monospace,monospace}.cmdinput{flex:1;min-width:0;background:#0f0b15;border:1px solid #583451;border-radius:12px;padding:12px;color:var(--text);outline:none;font:13px ui-monospace,monospace}.cmdinput:focus{border-color:var(--pink);box-shadow:0 0 0 3px #ff8fcf19}.hint{font-size:11px;color:var(--muted);margin:10px 2px 0;line-height:1.5}.lowergrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.mini{padding:16px}.mini h3{font-size:13px;margin:0 0 10px}.mini p{font-size:12px;line-height:1.6;color:var(--muted);margin:0}.tagrow{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.tag{border:1px solid #593451;background:#24162b;color:#ffd8ef;border-radius:9px;padding:6px 8px;font-size:11px}.floating{position:fixed;right:20px;bottom:20px;width:54px;height:54px;border-radius:50%;border:1px solid #ffd0eb;background:linear-gradient(145deg,#ffbce4,#f15eb5);color:#471336;font-size:23px;box-shadow:0 8px 30px #fa6ab855;z-index:20;touch-action:none;user-select:none}.modalback{display:none;position:fixed;inset:0;background:#08050bd9;z-index:30;align-items:center;justify-content:center;padding:20px}.modal{max-width:420px;width:100%;padding:22px;border-radius:18px;border:1px solid #995283;background:#21142a;box-shadow:0 20px 70px #0009}.modal h2{margin:0 0 10px;font-size:19px}.modal p{font-size:13px;line-height:1.6;color:var(--muted)}.modalbuttons{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
+@media(max-width:850px){.app{padding:12px}.grid{grid-template-columns:1fr}.gamebox{min-height:310px}.lowergrid{grid-template-columns:1fr}.topbar{padding:14px}.brand h1{font-size:17px}}
+</style>
+<style>
+.run-type{font-size:14px;padding:12px 18px;box-shadow:0 6px 24px #ff8fcf33}.dialog-backdrop{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:18px;background:#09060dcc;backdrop-filter:blur(8px)}.dialog{width:min(520px,100%);padding:22px;background:#21142a;border:1px solid #875176;border-radius:16px;box-shadow:0 24px 80px #0008}.dialog h2{margin:0 0 8px;font-size:19px}.dialog p{color:var(--muted);font-size:13px;line-height:1.55}.dialog-actions{display:grid;gap:10px;margin-top:18px}.dialog-actions .btn{text-align:left}.warning{margin:7px 2px 0!important;color:#ffd9a7!important;font-size:12px!important}.dialog-close{float:right;padding:5px 9px}.file-search{width:100%;padding:10px 11px;margin:0 0 8px;border:1px solid #59304f;border-radius:9px;background:#120d19;color:var(--text)}.package-tools{padding:12px 14px 0}.remove-package{margin-top:10px}.gamebox{position:relative}.gamebox.is-playing{display:block;padding:0;min-height:540px}.game-frame{display:none;width:100%;height:min(75vh,820px);min-height:460px;border:0;background:#fff}.gamebox.is-playing .game-frame{display:block}.gamebox.is-playing #gameplaceholder,.gamebox.is-playing .gameactions{display:none}.gamebox.is-playing #gameFrame{display:block}.package-entry{overflow-wrap:anywhere}
+@media(max-width:600px){.dialog{padding:18px}.gamebox.is-playing{min-height:420px}.game-frame{height:70vh;min-height:360px}.run-type{flex:1}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="brand"><div class="logo">💗</div><div><h1>DDLC Control Centre</h1><p>Pink interface · local file inspection · command terminal</p></div></div>
+  <div class="actions"><button class="btn primary run-type" id="runTypeBtn">Run Type</button><button class="btn" id="uploadTop">Upload .zip</button><button class="btn" id="connectBtn">Connect runtime</button><button class="btn" id="helpBtn">Command help</button><button class="btn primary" id="resetBtn">Reset</button></div>
+</header>
+<main class="grid">
+  <section class="panel">
+    <div class="panelhead"><h2>GAME VIEW</h2><span class="pill" id="runtimePill">RUNTIME NOT CONNECTED</span></div>
+    <div class="gamebox" id="gamebox">
+      <div id="gameplaceholder"><div class="heartmark">♡</div><h2>Doki Doki Literature Club!</h2>
+      <p>This control centre is ready for your DDLC package. Upload the ZIP to inspect its file list. The desktop game package is not itself a browser game, so actual gameplay and scene jumps need a compatible Ren’Py runtime.</p></div>
+      <div class="gameactions"><button class="btn primary" id="uploadMain">Upload DDLC .zip</button><button class="btn" id="checkBtn">Check game files</button><button class="btn" id="sceneBtn">List scenes</button></div>
+      <iframe class="game-frame" id="gameFrame" title="Uploaded browser game" sandbox="allow-scripts allow-forms allow-pointer-lock" referrerpolicy="no-referrer"></iframe>
+    </div>
+    <div class="statusrow"><div class="statusitem">Package: <b id="pkgStatus">Not loaded</b></div><div class="statusitem">Files indexed: <b id="fileCount">0</b></div><div class="statusitem">Launch: <b id="launchStatus">Idle</b></div><div class="statusitem">Game runtime: <b id="gameStatus">Not connected</b></div></div>
+  </section>
+  <aside class="panel">
+    <div class="panelhead"><h2>PACKAGE FILES</h2><span class="pill" id="zipPill">NO ZIP</span></div>
+    <div class="sidebody">
+      <div class="dropzone" id="dropzone"><strong>💗 Upload your DDLC-WIN ZIP</strong><p>Choose the game archive to list its files. The original ZIP is read-only; deleting a listed item only hides it from this control-centre view.</p><button class="btn primary" id="uploadSide">Choose .zip file</button><input id="zipInput" class="fileinput" type="file" accept=".zip,application/zip"></div>
+      <div class="package-tools"><input class="file-search" id="fileSearch" type="search" placeholder="Search indexed files" aria-label="Search indexed files"><button class="btn remove-package" id="removePackageBtn" hidden>Remove package from session</button></div>
+      <div class="filelist" id="filelist"><div class="empty">No archive loaded yet.</div></div>
+    </div>
+  </aside>
+</main>
+<section class="panel terminal">
+  <div class="panelhead"><h2>CONTROL TERMINAL</h2><span class="pill">FUZZY AUTOCOMPLETE ON</span></div>
+  <div class="terminalbody">
+    <div class="termout" id="termout" aria-live="polite"></div>
+    <div class="commandarea"><div class="suggestions" id="suggestions" role="listbox"></div><div class="inputrow"><span class="prompt">DDLC&gt;</span><input class="cmdinput" id="cmdinput" autocomplete="off" spellcheck="false" placeholder="Type a command… (try help)"><button class="btn primary" id="runBtn">Run</button></div></div>
+    <div class="hint">↑ / ↓ browse suggestions or command history · Enter selects/runs · Tab accepts suggestion · Commands operate only on this page’s imported file listing unless stated otherwise.</div>
+  </div>
+</section>
+<div class="lowergrid">
+  <section class="panel mini"><h3>🎀 DDLC CONTROL COMMANDS</h3><p>Scene and act commands send requests through the local bridge to the Ren’Py patch. Known aliases are mapped to labels found in the supplied DDLC 1.1.1 scripts; arbitrary labels are checked by the game before a jump.</p><div class="tagrow"><span class="tag">scene list</span><span class="tag">scene current</span><span class="tag">scene &lt;label&gt;</span><span class="tag">act 1–4</span><span class="tag">reset</span><span class="tag">restart-game</span></div></section>
+  <section class="panel mini"><h3>🔒 RESET & FILE SAFETY</h3><p><b>reset</b> asks for confirmation and clears this control centre’s temporary session state. It does not falsely claim to erase or reset DDLC’s real save files. Your uploaded original ZIP is never modified.</p><div class="tagrow"><span class="tag">Original ZIP preserved</span><span class="tag">Confirm before reset</span><span class="tag">No arbitrary shell execution</span></div></section>
+</div>
+</div>
+<button class="floating" id="floating" title="Open terminal" aria-label="Open terminal">💓</button>
+<div class="modalback" id="modalback" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><h2 id="modalTitle">Confirm reset</h2><p id="modalText">Reset the control centre’s temporary session state? Your original ZIP will not be changed.</p><div class="modalbuttons"><button class="btn" id="cancelModal">Cancel</button><button class="btn primary" id="confirmModal">Reset</button></div></div></div>
+<div class="dialog-backdrop" id="runTypeDialog" role="dialog" aria-modal="true" aria-labelledby="runTypeTitle"><div class="dialog"><button class="btn dialog-close" id="closeRunType" aria-label="Close">Close</button><h2 id="runTypeTitle">Choose a package type</h2><p id="runTypeMessage">Select a launch path. The Control Centre will report what the files actually support.</p><div class="dialog-actions"><button class="btn primary" id="runRecommended">Run Recommended Version</button><div><button class="btn" id="uploadCustom">Upload Custom</button><p class="warning">The Integrated commands will be unsupported unless you get our official .zip</p></div></div><div class="statusitem package-entry" id="packageSummary">No package selected.</div></div></div>
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+const out=$('termout'), input=$('cmdinput'), sugg=$('suggestions');
+let zipEntries=[], hiddenEntries=new Set(), loadedZipName='', history=[], histIndex=0, activeSuggestion=0, modalAction=null;
+let selectedZipFile=null, packageType='none', packageId='', browserEntrypoint='';
+const commands=[
+['help','Show available commands and usage'],['help all','Show the full command catalogue'],['clear','Clear terminal output'],['status','Show control-centre and runtime status'],['diagnostics','Show diagnostics'],['errors','Show current errors'],['logs','Show recent terminal output'],['history','Show command history'],
+['check-game','Check whether a DDLC package has been loaded'],['check-runtime','Check browser/runtime status'],['ddlc status','Show DDLC package status'],['ddlc files','List imported package files'],['ddlc labels','Inspect available script labels (requires decoded scripts)'],['ddlc search sayori','Search package filenames for Sayori'],['ddlc search yuri','Search package filenames for Yuri'],['ddlc search natsuki','Search package filenames for Natsuki'],['ddlc search monika','Search package filenames for Monika'],
+['connect-runtime','Connect to the local bridge and check whether the game is polling'],['runtime status','Show local bridge and game connection status'],['scene list','List known scene/label targets'],['scene current','Show the last scene target requested through this bridge'],['scene sayonara','Jump to the verified Sayori event label ch0_kill'],['scene confession','Jump to the verified Sayori confession label sayori_confess'],['scene natsuki','Jump to the verified Natsuki route entry ch3_start_natsuki'],['scene yuri','Jump to the verified Yuri event label yuri_kill'],['scene monika','Jump to the Act 3 entry ch30_main'],['act 1','Jump to Act 1 entry ch0_main'],['act 2','Jump to Act 2 entry ch21_main'],['act 3','Jump to Act 3 entry ch30_main'],['act 4','Jump to Act 4 entry ch40_main'],['run-ddlc','Show instructions to launch DDLC desktop game manually'],['restart-game','Restart the actual game through Ren’Py (runtime required)'],['reset','Restart the actual game to its opening through Ren’Py; confirmation required'],['reset story','Restart the actual game through Ren’Py; confirmation required'],['reset saves','Not implemented: game-save deletion is intentionally not wired in'],['reset settings','Reset this page’s settings to defaults'],['reset confirm','Open reset confirmation'],
+['ls','List imported archive entries'],['dir','Alias for ls'],['tree','Show a short tree of imported entries'],['files','List imported archive entries'],['find','Find file paths by text: find <term>'],['search','Search file paths: search <term>'],['inspect','Inspect matching file paths: inspect <term>'],['cat','Show metadata for a matching path: cat <path>'],['type','Alias for cat'],['stat','Show file metadata: stat <path>'],['touch','Create a virtual placeholder entry: touch <name>'],['mkdir','Create a virtual folder marker: mkdir <name>'],['copy','Copy a path in the virtual listing: copy <source> <destination>'],['cp','Alias for copy'],['move','Move a path in the virtual listing: move <source> <destination>'],['mv','Alias for move'],['rename','Rename a path in the virtual listing: rename <path> <new-name>'],['ren','Alias for rename'],['delete','Hide an entry from this listing: delete <path>'],['del','Alias for delete'],['erase','Alias for delete'],['rm','Alias for delete'],['remove','Alias for delete'],['restore','Restore hidden imported entries to the listing'],
+['js','Show safe JavaScript utility status; arbitrary code execution is disabled'],['javascript','Alias for js'],['check-js','Check built-in page JavaScript support'],['format-js','Explain that arbitrary code formatting is not wired up'],['parse-json','Parse JSON literal: parse-json <json>'],['validate-json','Validate JSON literal: validate-json <json>'],['encode','Encode text as Base64: encode <text>'],['decode','Decode Base64: decode <base64>'],['base64','Alias for encode <text> or decode <base64>'],['url-encode','URL-encode text: url-encode <text>'],['url-decode','URL-decode text: url-decode <text>'],['inspect-object','Inspect JSON object keys: inspect-object <json>'],['list-keys','List keys in a JSON object: list-keys <json>'],['list-values','List values in a JSON object: list-values <json>'],
+['validate-zip','Check whether a ZIP archive is loaded and indexed'],['export-debug-report','Download a text diagnostic report']
+];
+const BRIDGE_ORIGIN=location.origin;
+const BRIDGE_TOKEN='__DDLC_CC_TOKEN__';
+const ACT_TARGETS={'act 1':'ch0_main','act 2':'ch21_main','act 3':'ch30_main','act 4':'ch40_main'};
+let bridgeOnline=false, gameOnline=false, lastResultId=0, lastRequestedScene='(none)', runtimeLabels=new Set();
+async function bridgeFetch(path, options={}){const sep=path.includes('?')?'&':'?';return fetch(BRIDGE_ORIGIN+path+sep+'token='+encodeURIComponent(BRIDGE_TOKEN),options)}
+async function refreshBridgeStatus(silent=false){try{const r=await bridgeFetch('/status');if(!r.ok)throw new Error('bridge response '+r.status);const s=await r.json();bridgeOnline=true;gameOnline=!!s.game_connected;$('runtimePill').textContent=gameOnline?'GAME CONNECTED':(bridgeOnline?'BRIDGE ONLINE · GAME WAITING':'RUNTIME NOT CONNECTED');$('gameStatus').textContent=gameOnline?`Connected · ${s.runtime_label_count||0} labels`:'Not connected';if(!gameOnline)updateRuntimeCommands([]);if(!silent)log(gameOnline?'Connected: bridge and Ren’Py patch are responding.':'Local bridge is online; the game patch has not checked in.','warn');await readBridgeResults();return s}catch(e){bridgeOnline=false;gameOnline=false;updateRuntimeCommands([]);$('runtimePill').textContent='RUNTIME NOT CONNECTED';$('gameStatus').textContent='Not connected';if(!silent)log('Cannot reach the local bridge. Open this page from bridge.py on the same desktop/runtime host.','warn');return null}}
+async function readBridgeResults(){try{const r=await bridgeFetch('/results?after='+lastResultId);if(!r.ok)return;const data=await r.json();(data.results||[]).forEach(x=>{lastResultId=Math.max(lastResultId,x.id||0);log('[GAME] '+x.message,x.ok?'ok':'warn');if(x.scene)lastRequestedScene=x.scene;if(Array.isArray(x.labels))updateRuntimeCommands(x.labels);});}catch(e){}}
+async function sendRuntimeCommand(command){const status=await refreshBridgeStatus(true);if(!status){log('Command not sent: start the local bridge first.','warn');return false}try{const r=await bridgeFetch('/command',{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({command})});const d=await r.json();if(!r.ok||!d.ok)throw new Error(d.error||('HTTP '+r.status));log(d.game_connected?'Sent to the running DDLC game: '+command:'Queued for DDLC; the game has not checked in yet: '+command,d.game_connected?'ok':'warn');if(command.startsWith('scene '))lastRequestedScene=command.slice(6);return true}catch(e){log('Could not send command to game bridge: '+e.message,'err');return false}}
+function log(msg,kind=''){const d=document.createElement('div');d.className='line '+kind;d.textContent=msg;out.appendChild(d);out.scrollTop=out.scrollHeight;}
+function promptLog(cmd){const d=document.createElement('div');d.className='line';const s=document.createElement('span');s.className='prefix';s.textContent='DDLC> ';d.append(s,document.createTextNode(cmd));out.appendChild(d);out.scrollTop=out.scrollHeight;}
+function norm(s){return s.toLowerCase().trim().replace(/\s+/g,' ')}
+function fuzzy(a,b){a=norm(a);b=norm(b);if(!a)return 1;if(b.startsWith(a))return 0.1+(b.length-a.length)/100;if(a.startsWith(b))return .3;let i=0;for(const ch of a)if(b.includes(ch))i++;return 1-i/Math.max(a.length,b.length)}
+function updateSuggestions(){const q=input.value.trim();if(!q){sugg.style.display='none';return}const parts=q.split(/\s+/);const matches=commands.map(c=>({name:c[0],desc:c[1],score:fuzzy(q,c[0])})).filter(x=>x.score<.78).sort((a,b)=>a.score-b.score).slice(0,7);if(!matches.length){sugg.style.display='none';return}activeSuggestion=Math.min(activeSuggestion,matches.length-1);sugg.innerHTML='';matches.forEach((m,i)=>{const row=document.createElement('div');row.className='suggestion'+(i===activeSuggestion?' active':'');row.setAttribute('role','option');const code=document.createElement('code');code.textContent=m.name;const desc=document.createElement('span');desc.textContent=m.desc;row.append(code,desc);row.addEventListener('mousedown',e=>{e.preventDefault();input.value=m.name+' ';sugg.style.display='none';input.focus()});sugg.appendChild(row)});sugg.style.display='block'}
+function printList(list){if(!list.length){log('No matching entries.','warn');return}log(list.slice(0,100).join('\n'));if(list.length>100)log(`Showing first 100 of ${list.length} entries.`,'warn')}
+function activeEntries(){return zipEntries.filter(x=>!hiddenEntries.has(x.name))}
+function matchPath(q){q=norm(q);return activeEntries().filter(x=>norm(x.name).includes(q))}
+function requestReset(title,text,action){$('modalTitle').textContent=title;$('modalText').textContent=text;modalAction=action;$('modalback').style.display='flex'}
+function doReset(){localStorage.removeItem('ddlc-control-centre-session');hiddenEntries.clear();history=[];histIndex=0;log('Control-centre temporary state reset. Original ZIP and its files remain untouched.','ok');renderFiles();$('modalback').style.display='none'}
+function run(raw){const full=raw.trim();if(!full)return;history.push(full);histIndex=history.length;promptLog(full);sugg.style.display='none';const low=norm(full), first=low.split(' ')[0], rest=full.trim().slice(first.length).trim();const args=rest;
+if(low==='help'||low==='help all'){log('AVAILABLE COMMANDS');const filtered=commands.filter(c=>low==='help all'||!['touch','mkdir','copy','cp','move','mv','rename','ren','delete','del','erase','rm','remove','restore','js','javascript','format-js','parse-json','validate-json','encode','decode','base64','url-encode','url-decode','inspect-object','list-keys','list-values'].includes(c[0]));filtered.forEach(c=>log('  '+c[0]+' — '+c[1]));return}
+if(low==='clear'){out.innerHTML='';return}
+if(low==='status'||low==='ddlc status'){log(`Package: ${loadedZipName||'not loaded'}\nIndexed entries: ${activeEntries().length}\nRuntime: not connected\nBrowser: ${navigator.userAgent}`);return}
+if(low==='connect-runtime'||low==='runtime status'||low==='check-runtime'){refreshBridgeStatus(false);return}
+if(low==='diagnostics'){log('Browser JavaScript: available\nLocal bridge: '+(bridgeOnline?'online':'not connected')+'\nDDLC runtime: '+(gameOnline?'connected':'not connected')+'\nScene jumps/reset are sent to the Ren’Py patch when connected.','warn');return}
+if(low==='errors'){log('No page errors recorded by the control centre. Check runtime status for bridge/game connectivity.','ok');return}
+if(low==='logs'){log(out.innerText||'No logs yet.');return}
+if(low==='history'){printList(history);return}
+if(low==='check-game'||low==='validate-zip'){if(!loadedZipName){log('No game ZIP loaded. Use Upload .zip first.','warn')}else{log(`Loaded archive listing: ${loadedZipName}\n${activeEntries().length} visible entries.\nThe ZIP has not been modified.`,'ok')}return}
+if(low==='check-js'||low==='js'||low==='javascript'){log('Built-in JavaScript is active. Arbitrary JavaScript execution is disabled. Use the safe JSON and encoding utilities.','ok');return}
+if(low==='run-ddlc'){log('Launch DDLC manually from the extracted game folder (DDLC.exe on Windows or DDLC.sh on Linux). This browser page cannot launch desktop executables. Start bridge.py before opening the game.','warn');return}
+if(low==='restart-game'){sendRuntimeCommand('restart-game');return}
+if(low==='scene list'||low==='ddlc labels'){sendRuntimeCommand('scene list');return}
+if(low==='scene current'){log('Last requested scene target: '+lastRequestedScene+' (this is not a live scene inspector).','warn');sendRuntimeCommand('scene current');return}
+if(low.startsWith('scene ')||/^act [1-4]$/.test(low)){sendRuntimeCommand(full);return}
+if(low==='reset saves'){log('Save deletion is not implemented in this integration. No save files were changed.','warn');return}
+if(low==='reset story'){requestReset('Restart DDLC story','Send a full game restart to Ren’Py? The original game files and saved games will be preserved.',()=>{sendRuntimeCommand('reset');hiddenEntries.clear();renderFiles();$('modalback').style.display='none'});return}
+if(low==='reset'||low==='reset confirm'){requestReset('Confirm DDLC reset','Restart the actual DDLC game to its opening through Ren’Py? The original game files and saved games will be preserved. If the game is not running, the request will queue until its patch connects.',()=>{sendRuntimeCommand('reset');hiddenEntries.clear();renderFiles();$('modalback').style.display='none'});return}
+if(low==='reset settings'){requestReset('Reset settings','Restore this control centre page to its default temporary state?',()=>{hiddenEntries.clear();renderFiles();$('modalback').style.display='none';log('Control-centre view restored to defaults.','ok')});return}
+if(['ls','dir','files','ddlc files'].includes(low)){if(!loadedZipName){log('No ZIP loaded. Use Upload .zip first.','warn');return}printList(activeEntries().map(x=>x.name));return}
+if(low==='tree'){const entries=activeEntries().slice(0,80).map(x=>x.name);log(entries.length?'.\n'+entries.map((x,i)=>(i===entries.length-1?'└── ':'├── ')+x).join('\n'):'No entries to show.');return}
+if(['find','search','inspect'].includes(first)){if(!args){log(`Usage: ${first} <text>`, 'warn');return}const ms=matchPath(args);printList(ms.map(x=>x.name));return}
+if(['cat','type','stat'].includes(first)){if(!args){log(`Usage: ${first} <path>`,'warn');return}const x=activeEntries().find(e=>norm(e.name)===norm(args))||matchPath(args)[0];if(!x){log('Path not found in the current listing.','err');return}log(`Path: ${x.name}\nSize: ${x.size??'unknown'} bytes\nSource: imported ZIP listing\nContent: not extracted or changed by this page.`);return}
+if(['delete','del','erase','rm','remove'].includes(first)){if(!args){log(`Usage: ${first} <path>`,'warn');return}const matches=activeEntries().filter(e=>norm(e.name)===norm(args)||norm(e.name).startsWith(norm(args).replace(/\/?$/,'/')));if(!matches.length){log('No matching entry. The original ZIP is read-only.','err');return}matches.forEach(e=>hiddenEntries.add(e.name));renderFiles();log(`Hidden ${matches.length} entry/entries from this page’s listing only. The ZIP itself was not changed.`,'ok');return}
+if(low==='restore'){hiddenEntries.clear();renderFiles();log('All imported entries restored to the listing.','ok');return}
+if(first==='touch'||first==='mkdir'){if(!args){log(`Usage: ${first} <name>`,'warn');return}const name=(first==='mkdir'?args.replace(/\/?$/,'/') : args);if(zipEntries.some(x=>x.name===name)){log('That path already exists in the imported listing.','warn');return}zipEntries.push({name,size:0,virtual:true});renderFiles();log(`Created virtual listing marker: ${name}. It is not written into the original ZIP.`,'ok');return}
+if(['copy','cp','move','mv','rename','ren'].includes(first)){const p=args.split(/\s+/);if(p.length<2){log(`Usage: ${first} <source> <destination>`,'warn');return}const src=activeEntries().find(e=>norm(e.name)===norm(p[0]));if(!src){log('Source path not found.','err');return}const dest=p.slice(1).join(' ');if(first==='move'||first==='mv'||first==='rename'||first==='ren')hiddenEntries.add(src.name);zipEntries.push({name:dest,size:src.size,virtual:true});renderFiles();log(`Created virtual entry ${dest}. Imported ZIP remains unchanged.`,'ok');return}
+if(low.startsWith('parse-json ')||low.startsWith('validate-json ')||low.startsWith('inspect-object ')||low.startsWith('list-keys ')||low.startsWith('list-values ')){const pos=full.indexOf(' '), val=full.slice(pos+1);try{const obj=JSON.parse(val);if(first==='list-keys')log(JSON.stringify(Object.keys(obj),null,2),'ok');else if(first==='list-values')log(JSON.stringify(Object.values(obj),null,2),'ok');else if(first==='inspect-object')log(JSON.stringify({type:Array.isArray(obj)?'array':typeof obj,keys:obj&&typeof obj==='object'?Object.keys(obj):[],value:obj},null,2),'ok');else log('Valid JSON.','ok')}catch(e){log('Invalid JSON: '+e.message,'err')}return}
+if(['encode','base64','decode','url-encode','url-decode'].includes(first)){try{if(first==='url-encode')log(encodeURIComponent(args),'ok');else if(first==='url-decode')log(decodeURIComponent(args),'ok');else if(first==='decode'||(first==='base64'&&args.startsWith('decode ')))log(atob(first==='base64'?args.slice(7):args),'ok');else {const v=first==='base64'&&args.startsWith('encode ')?args.slice(7):args;log(btoa(unescape(encodeURIComponent(v))),'ok')}}catch(e){log('Could not process input: '+e.message,'err')}return}
+if(low==='export-debug-report'){const blob=new Blob([`DDLC Control Centre debug report\nPackage: ${loadedZipName||'none'}\nVisible entries: ${activeEntries().length}\nRuntime: not connected\nUser agent: ${navigator.userAgent}\nHistory:\n${history.join('\n')}\n`],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ddlc-debug-report.txt';a.click();URL.revokeObjectURL(a.href);log('Downloaded debug report.','ok');return}
+if(low==='format-js'){log('No source-code formatter is connected in this page.','warn');return}
+if(low.startsWith('ddlc search ')){const term=full.trim().split(/\s+/).slice(2).join(' ');const ms=matchPath(term);printList(ms.map(x=>x.name));return}
+const near=commands.map(c=>({name:c[0],score:fuzzy(low,c[0])})).sort((a,b)=>a.score-b.score).slice(0,3);log(`Unknown command: ${full}`,'err');if(near.length)log('Did you mean: '+near.map(x=>x.name).join(', ')+'? Type help to see commands.','warn');
+}
+$('uploadTop').onclick=$('uploadMain').onclick=$('uploadSide').onclick=()=>$('zipInput').click();$('zipInput').addEventListener('change',e=>{if(e.target.files[0])readZip(e.target.files[0])});$('dropzone').addEventListener('dragover',e=>{e.preventDefault();$('dropzone').style.borderColor='var(--pink)'});$('dropzone').addEventListener('dragleave',()=>$('dropzone').style.borderColor='');$('dropzone').addEventListener('drop',e=>{e.preventDefault();$('dropzone').style.borderColor='';if(e.dataTransfer.files[0])readZip(e.dataTransfer.files[0])});
+$('runBtn').onclick=()=>{run(input.value);input.value='';updateSuggestions();input.focus()};input.addEventListener('input',()=>{activeSuggestion=0;updateSuggestions()});input.addEventListener('keydown',e=>{const rows=[...sugg.querySelectorAll('.suggestion')];if(e.key==='ArrowDown'&&sugg.style.display==='block'){e.preventDefault();activeSuggestion=(activeSuggestion+1)%rows.length;updateSuggestions()}else if(e.key==='ArrowUp'&&sugg.style.display==='block'){e.preventDefault();activeSuggestion=(activeSuggestion-1+rows.length)%rows.length;updateSuggestions()}else if(e.key==='Tab'&&rows.length){e.preventDefault();input.value=rows[activeSuggestion].querySelector('code').textContent+' ';sugg.style.display='none'}else if(e.key==='Enter'){e.preventDefault();if(sugg.style.display==='block'&&rows.length&&input.value.trim()===rows[activeSuggestion].querySelector('code').textContent){input.value=rows[activeSuggestion].querySelector('code').textContent+' ';updateSuggestions()}else run(input.value),input.value='';}else if(e.key==='ArrowUp'&&sugg.style.display!=='block'){e.preventDefault();if(history.length){histIndex=Math.max(0,histIndex-1);input.value=history[histIndex]}}else if(e.key==='ArrowDown'&&sugg.style.display!=='block'){e.preventDefault();histIndex=Math.min(history.length,histIndex+1);input.value=history[histIndex]||''}});document.addEventListener('click',e=>{if(!e.target.closest('.commandarea'))sugg.style.display='none'});
+$('connectBtn').onclick=()=>refreshBridgeStatus(false);$('helpBtn').onclick=()=>{input.value='help';run(input.value);input.value=''};$('checkBtn').onclick=()=>run('check-game');$('sceneBtn').onclick=()=>run('scene list');$('resetBtn').onclick=()=>run('reset');$('cancelModal').onclick=()=>$('modalback').style.display='none';$('confirmModal').onclick=()=>{if(modalAction)modalAction();modalAction=null};$('floating').addEventListener('click',()=>{document.querySelector('.terminal').scrollIntoView({behavior:'smooth',block:'center'});input.focus()});
+let drag=null;const float=$('floating');float.addEventListener('pointerdown',e=>{drag={x:e.clientX-float.offsetLeft,y:e.clientY-float.offsetTop,moved:false};float.setPointerCapture(e.pointerId)});float.addEventListener('pointermove',e=>{if(!drag)return;if(Math.abs(e.clientX-(float.offsetLeft+drag.x))>5||Math.abs(e.clientY-(float.offsetTop+drag.y))>5)drag.moved=true;float.style.left=Math.max(0,Math.min(innerWidth-54,e.clientX-drag.x))+'px';float.style.top=Math.max(0,Math.min(innerHeight-54,e.clientY-drag.y))+'px';float.style.right='auto';float.style.bottom='auto'});float.addEventListener('pointerup',()=>{if(drag&&drag.moved)float.dataset.dragged='1';drag=null});
+log('DDLC Control Centre ready. 💗','ok');log('Type help to view commands. Start bridge.py, install the Ren’Py patch, and launch DDLC to enable live commands.');log('The original ZIP remains unchanged; reset restarts the game but does not delete saved games.','warn');refreshBridgeStatus(true);setInterval(()=>{if(!document.hidden)refreshBridgeStatus(true)},2500);
+// Keep package controls in this closure so they share the existing app state.
+
+function detectPackage(entries){
+  const names=entries.map(entry=>entry.name);
+  const desktop=names.some(name=>/(^|\/)DDLC\.(exe|sh)$/i.test(name))||names.some(name=>/(^|\/)game\/scripts\.rpa$/i.test(name));
+  if(desktop)return {type:'desktop-renpy',entry:null,compatible:false,detail:'Desktop Ren’Py package. Its executable cannot run inside an ordinary browser page.'};
+  const htmlFiles=names.filter(name=>/\.html?$/i.test(name));
+  const entry=htmlFiles.find(name=>name.toLowerCase()==='index.html')||htmlFiles.find(name=>/\/index\.html$/i.test(name))||(htmlFiles.length===1?htmlFiles[0]:null);
+  if(entry)return {type:'browser-port',entry,compatible:true,detail:`Browser package. Detected entry point: ${entry}.`};
+  return {type:'unknown',entry:null,compatible:false,detail:'Unrecognized package. No desktop Ren’Py markers or unambiguous HTML entry point were found.'};
+}
+
+function setLaunchStatus(text){$('launchStatus').textContent=text}
+function showPackageSummary(){
+  const detected=detectPackage(zipEntries);
+  packageType=detected.type;
+  browserEntrypoint=detected.entry||'';
+  $('packageSummary').textContent=loadedZipName?`${loadedZipName} · ${detected.detail} ${detected.compatible?'Browser launch requires the local bridge.':'Not launchable in this browser.'}`:'No package selected.';
+  $('removePackageBtn').hidden=!loadedZipName;
+  $('gameStatus').textContent=gameOnline?'Connected':'Not connected';
+  return detected;
+}
+
+async function readZip(file){
+  if(!file.name.toLowerCase().endsWith('.zip')){log('Please choose a .zip file.','err');return}
+  if(file.size>512*1024*1024){log('ZIP rejected: archive is larger than the 512 MiB upload limit.','err');return}
+  try{
+    const buf=await file.arrayBuffer(), view=new DataView(buf);
+    let eocd=-1;
+    for(let offset=buf.byteLength-22;offset>=Math.max(0,buf.byteLength-65557);offset--){if(view.getUint32(offset,true)===0x06054b50){eocd=offset;break}}
+    if(eocd<0)throw new Error('ZIP central directory not found; ZIP64 and incomplete archives are not supported.');
+    const count=view.getUint16(eocd+10,true), cdSize=view.getUint32(eocd+12,true), cdOffset=view.getUint32(eocd+16,true);
+    if(count===0xffff||cdSize===0xffffffff||cdOffset===0xffffffff)throw new Error('ZIP64 archives are not supported yet.');
+    if(count>20000||cdOffset+cdSize>eocd)throw new Error('ZIP directory is invalid or contains too many entries.');
+    const entries=[];let offset=cdOffset,totalSize=0;const names=new Set();
+    for(let index=0;index<count;index++){
+      if(offset+46>cdOffset+cdSize||view.getUint32(offset,true)!==0x02014b50)throw new Error('Invalid ZIP directory entry.');
+      const size=view.getUint32(offset+24,true), nameLength=view.getUint16(offset+28,true), extraLength=view.getUint16(offset+30,true), commentLength=view.getUint16(offset+32,true);
+      const end=offset+46+nameLength+extraLength+commentLength;
+      if(end>cdOffset+cdSize)throw new Error('Truncated ZIP directory entry.');
+      const name=new TextDecoder('utf-8',{fatal:true}).decode(new Uint8Array(buf,offset+46,nameLength));
+      if(name.includes('\\')||name.includes('\0')||name.startsWith('/')||name.split('/').some(part=>part==='..'||part==='.') )throw new Error('ZIP contains an unsafe path.');
+      const normalized=name.replace(/\/$/,'');
+      if(normalized&&!names.has(normalized)){names.add(normalized);entries.push({name,size});totalSize+=size}
+      if(totalSize>1024*1024*1024)throw new Error('ZIP expands beyond the 1 GiB safety limit.');
+      offset=end;
+    }
+    selectedZipFile=file;zipEntries=entries;hiddenEntries.clear();loadedZipName=file.name;renderFiles();
+    const detected=showPackageSummary();
+    log(`Indexed ${entries.length} paths from ${file.name}. The original ZIP remains unchanged.`,'ok');
+    log(detected.detail,detected.compatible?'ok':'warn');
+  }catch(error){log('ZIP inspection failed: '+error.message,'err')}
+}
+
+function renderFiles(){
+  const list=$('filelist');list.innerHTML='';
+  const query=norm($('fileSearch').value);
+  const entries=activeEntries().filter(entry=>!query||norm(entry.name).includes(query));
+  $('fileCount').textContent=activeEntries().length;$('pkgStatus').textContent=loadedZipName?packageType:'Not loaded';$('zipPill').textContent=loadedZipName?'ZIP INDEXED':'NO ZIP';
+  if(!entries.length){const empty=document.createElement('div');empty.className='empty';empty.textContent=loadedZipName?(query?'No files match that search.':'No visible entries. Use restore to bring hidden entries back.'):'No archive loaded yet.';list.appendChild(empty);return}
+  entries.slice(0,120).forEach(entry=>{const row=document.createElement('div');row.className='fileentry';const name=document.createElement('span');name.textContent=entry.name;name.className='package-entry';const hide=document.createElement('button');hide.textContent='Hide';hide.title='Hide from this page’s listing only';hide.addEventListener('click',()=>{hiddenEntries.add(entry.name);renderFiles();log('Entry hidden from this listing only; ZIP unchanged.','ok')});row.append(name,hide);list.appendChild(row)});
+  if(entries.length>120){const more=document.createElement('div');more.className='empty';more.textContent=`Showing 120 of ${entries.length} matches.`;list.appendChild(more)}
+}
+
+async function launchBrowserPackage(path){
+  if(!selectedZipFile){log('The selected ZIP is not available in this session. Upload the package again.','err');return}
+  const detected=showPackageSummary();
+  if(!detected.compatible||path!==detected.entry){log(`Unsupported entry point: ${path}. Supported browser entry point: ${detected.entry||'an unambiguous index.html or single HTML entry point'}. Desktop Ren’Py executables cannot run in this page.`,'err');return}
+  setLaunchStatus('Preparing browser package…');
+  try{
+    const response=await bridgeFetch('/package',{method:'POST',headers:{'Content-Type':'application/zip'},body:await selectedZipFile.arrayBuffer()});
+    const data=await response.json();if(!response.ok||!data.ok)throw new Error(data.error||`bridge returned ${response.status}`);
+    packageId=data.package_id;
+    const encodedPath=path.split('/').map(encodeURIComponent).join('/');
+    const frame=$('gameFrame');frame.onload=()=>setLaunchStatus('Preview document loaded; game runtime is not monitored.');
+    frame.onerror=()=>setLaunchStatus('Browser preview failed to load.');
+    $('gamebox').classList.add('is-playing');
+    frame.src=`${BRIDGE_ORIGIN}/package/${encodeURIComponent(packageId)}/${encodedPath}`;
+    setLaunchStatus('Loading browser entry point…');
+    log(`Opened browser entry point ${path} in an isolated frame. The page does not monitor its game runtime.`,'ok');
+  }catch(error){setLaunchStatus('Launch failed');log(`Browser package could not be hosted: ${error.message}. Start bridge.py and open this page from its forwarded port.`, 'err')}
+}
+
+  function canNavigate(command,labels){
+    if(command==='scene list'||command==='scene current')return true;
+    const available=labels instanceof Set?labels:new Set(labels||[]);
+    if(Object.prototype.hasOwnProperty.call(ACT_TARGETS,command))return available.has(ACT_TARGETS[command]);
+    const scene=command.match(/^scene ([A-Za-z_][A-Za-z0-9_.]{0,119})$/);
+    return !!scene&&available.has(scene[1]);
+  }
+
+  function resolveRunRequest(requested,entries,detected){
+  const exact=entries.filter(entry=>entry.name.toLowerCase()===requested.toLowerCase()||entry.name.split('/').pop().toLowerCase()===requested.toLowerCase());
+  if(!exact.length)return {kind:'not-found',matches:entries.filter(entry=>entry.name.toLowerCase().includes(requested.toLowerCase())).map(entry=>entry.name)};
+  const paths=[...new Set(exact.map(entry=>entry.name))];
+  if(paths.length>1)return {kind:'ambiguous',matches:paths};
+  const path=paths[0];
+  if(detected.type!=='browser-port'||path!==detected.entry)return {kind:'unsupported',path,packageType:detected.type,entry:detected.entry};
+  return {kind:'launch',path};
+}
+
+const registeredRunForWrapper=run;
+run=function(raw){
+  const text=raw.trim();
+  const normalized=norm(text);
+  if(normalized==='status'||normalized==='ddlc status'){
+    history.push(text);histIndex=history.length;promptLog(text);sugg.style.display='none';
+    log(`Package: ${loadedZipName||'not loaded'}\nIndexed entries: ${activeEntries().length}\nRuntime: ${gameOnline?'connected':'not connected'}\nBrowser: ${navigator.userAgent}`);
+    return;
+  }
+    if(/^scene\s+/.test(normalized)&&!['scene list','scene current'].includes(normalized)){
+      const label=text.trim().split(/\s+/).slice(1).join(' ');
+      if(!canNavigate('scene '+label,runtimeLabels)){history.push(text);histIndex=history.length;promptLog(text);log('Scene command disabled: this label has not been reported by the connected game. Run scene list first.','err');return}
+    }
+    const act=normalized.match(/^act ([1-4])$/);
+    if(act&&!canNavigate(normalized,runtimeLabels)){history.push(text);histIndex=history.length;promptLog(text);log('Act command disabled: the connected game has not confirmed its configured label. Run scene list first.','err');return}
+  if(!/^run(?:\s|$)/i.test(text))return registeredRunForWrapper(raw);
+  history.push(text);histIndex=history.length;promptLog(text);sugg.style.display='none';
+  const requested=text.slice(3).trim();
+  if(!requested){log('Usage: run <filename>. Only a detected browser HTML entry point can be opened.','warn');return}
+  const result=resolveRunRequest(requested,zipEntries,showPackageSummary());
+  if(result.kind==='not-found'){log(`No exact filename match for ${requested}.`,'err');if(result.matches.length)printList(result.matches);else log('Supported entry type: the detected browser HTML entry point (usually index.html). Desktop .exe/.sh and Ren’Py archives are not browser entry points.','warn');return}
+  if(result.kind==='ambiguous'){log('More than one path matches; use a full path:','warn');printList(result.matches);return}
+  if(result.kind==='unsupported'){log(`Matched ${result.path}, but it is not a supported launch entry point.`,'err');log(`Detected package: ${result.packageType}. Supported entry type: ${result.entry||'browser HTML entry point'}. Desktop executables cannot run in a browser.`,'warn');return}
+  launchBrowserPackage(result.path);
+};
+
+$('runTypeBtn').addEventListener('click',()=>{$('runTypeDialog').style.display='flex'});
+$('closeRunType').addEventListener('click',()=>{$('runTypeDialog').style.display='none'});
+$('runTypeDialog').addEventListener('click',event=>{if(event.target===$('runTypeDialog'))$('runTypeDialog').style.display='none'});
+$('uploadCustom').addEventListener('click',()=>{$('runTypeDialog').style.display='none';$('zipInput').click()});
+$('runRecommended').addEventListener('click',()=>{
+  $('runTypeDialog').style.display='none';
+  runRecommendedGame();
+});
+$('fileSearch').addEventListener('input',renderFiles);
+$('removePackageBtn').addEventListener('click',async()=>{
+  if(packageId){try{await bridgeFetch(`/package/${encodeURIComponent(packageId)}`,{method:'DELETE'})}catch(error){log(`Could not clear hosted package: ${error.message}`,'warn')}}
+  packageId='';selectedZipFile=null;zipEntries=[];hiddenEntries.clear();loadedZipName='';packageType='none';browserEntrypoint='';
+  $('gameFrame').src='about:blank';$('gamebox').classList.remove('is-playing');$('fileSearch').value='';setLaunchStatus('Idle');renderFiles();showPackageSummary();
+  log('Selected package removed from this session. Original ZIP was not modified.','ok');
+});
+showPackageSummary();
+function updateRuntimeCommands(labels){
+  runtimeLabels=new Set(labels);
+  for(let index=commands.length-1;index>=0;index--){
+    const name=commands[index][0];
+    if(name==='run'||name==='scene <label>'||name.startsWith('scene ')&&!['scene list','scene current'].includes(name)||/^act [1-4]$/.test(name))commands.splice(index,1);
+  }
+  commands.push(['run','Open a supported browser entry point: run <filename>']);
+  commands.push(['scene <label>','Jump only to a label reported by the connected game']);
+  for(const label of runtimeLabels)commands.push(['scene '+label,'Jump to a label reported by the connected game']);
+  for(const [command,label] of Object.entries(ACT_TARGETS))if(runtimeLabels.has(label))commands.push([command,'Jump to runtime-verified label '+label]);
+}
+async function runRecommendedGame(){
+  setLaunchStatus('Checking recommended game installation…');
+  try{
+    const response=await bridgeFetch('/recommended');
+    const status=await response.json();
+    if(!response.ok||!status.ok)throw new Error(status.error||`bridge returned ${response.status}`);
+    $('packageSummary').textContent=`Recommended DDLC · Ren’Py ${status.runtime_version} · ${status.game_dir}`;
+    if(!status.ready){
+      setLaunchStatus('Game installation missing files');
+      log(`Recommended version is not ready. Missing: ${status.missing.join(', ')||status.platform_reason}. Install the private ZIP with: python3 bridge.py --install-recommended`,'warn');
+      return;
+    }
+    if(!status.launchable){
+      setLaunchStatus('Installed; desktop display unavailable');
+      log(`The recommended DDLC files and integration patch are installed, but this host cannot display the desktop game: ${status.platform_reason} A browser on another device cannot launch the host executable or show its desktop window.`,'warn');
+      return;
+    }
+    setLaunchStatus('Requesting desktop launch…');
+    const launch=await bridgeFetch('/launch/recommended',{method:'POST'});
+    const result=await launch.json();
+    if(!launch.ok||!result.ok)throw new Error(result.message||`launch failed (${launch.status})`);
+    setLaunchStatus('Launch requested; waiting for game bridge');
+    log(result.message,'warn');
+  }catch(error){setLaunchStatus('Launch unavailable');log(`Recommended launch failed: ${error.message}. Run bridge.py on the same graphical device as the DDLC installation.`,'err')}
+}
+updateRuntimeCommands([]);
+document.querySelector('.lowergrid .mini p').textContent='Scene list reports labels exposed by the running game. Scene jumps are checked with Ren’Py before use. Act shortcuts are attempted only when the configured label exists in that runtime; labels are not verified until a compatible game is running.';
+})();
+</script>
+</body>
+</html>
